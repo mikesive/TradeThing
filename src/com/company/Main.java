@@ -10,12 +10,13 @@ import java.util.*;
 public class Main {
 
     public static void main(String[] args) throws JSONException, IOException {
-        HashMap<String,Double[]> priceMap = Calculations.extractFloats(GetData.getData());
+        HashMap<String,double[]> priceMap = ExtractData.extractFloats(GetData.getData());
         for(Exchange exchange : Exchange.values()){
             String exchangeString =  exchange.getValue();
-            Double[] bidAsk = priceMap.get(exchangeString);
+            double[] bidAsk = priceMap.get(exchangeString);
             System.out.println(exchangeString + "-" + "bid: " + bidAsk[0]);
             System.out.println(exchangeString + "-" + "ask: " + bidAsk[1]);
         }
+        Comparison.makeComparison(priceMap);
     }
 }
