@@ -7,24 +7,28 @@ import java.io.*;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.HashMap;
+import com.company.Exchange;
 
 /**
  * Created with IntelliJ IDEA.
  * User: michaelsive
  * Date: 9/11/13
  * Time: 9:02 PM
- * To change this template use File | Settings | File Templates.
+ * Class used to access exchange ticker and store JSON "ticker" objects in exchangeMap
  */
 public class GetData {
-    public static ArrayList<JSONObject> getData() throws Exception {
+
+    public static HashMap<String, JSONObject>  getData() throws JSONException, IOException{
+        HashMap<String, JSONObject> exchangeMap = new HashMap<String, JSONObject>();
         JSONObject bitStamp = readJsonFromUrl("https://www.bitstamp.net/api/ticker/");
         JSONObject mtGox = readJsonFromUrl("http://data.mtgox.com/api/2/BTCUSD/money/ticker_fast");
-        ArrayList <JSONObject> dataValues = new ArrayList<JSONObject>();
+        JSONObject btcE = readJsonFromUrl("https://btc-e.com/api/2/btc_usd/ticker");
+        exchangeMap.put(Exchange.BITSTAMP.getValue(), bitStamp);
+        exchangeMap.put(Exchange.MTGOX.getValue(), mtGox);
+        exchangeMap.put(Exchange.BTCE.getValue(), btcE);
 
-        dataValues.add(bitStamp);
-        dataValues.add(mtGox);
-        return dataValues;
-
+        return exchangeMap;
     }
 
     private static String readAll(Reader rd) throws IOException {

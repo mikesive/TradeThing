@@ -1,26 +1,21 @@
 package com.company;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.URL;
-import java.nio.charset.Charset;
 import org.json.JSONException;
-import org.json.JSONObject;
 import java.util.*;
+
+/**
+ * Main class to print/display current bid and ask prices of all exchanges in Exchange enum class
+ */
 
 public class Main {
 
-    private static int BTS = 0;
-    private static int MTGOX = 1;
-
-    public static void main(String[] args) throws IOException, JSONException, Exception {
-	// write your code here
-        System.out.println("BitStamp - bid:" + Calculations.extractFloats(BTS, GetData.getData())[0]);
-        System.out.println("BitStamp - ask:" + Calculations.extractFloats(BTS, GetData.getData())[1]);
-        //System.out.println("MtGox: " + Calculations.extractFloats(1, GetData.getData()));
-        System.out.println("MtGox - bid:" + Calculations.extractFloats(MTGOX, GetData.getData())[0]);
-        System.out.println("MtGox - ask:" + Calculations.extractFloats(MTGOX, GetData.getData())[1]);
+    public static void main(String[] args) throws JSONException, IOException {
+        HashMap<String,Double[]> priceMap = Calculations.extractFloats(GetData.getData());
+        for(Exchange exchange : Exchange.values()){
+            String exchangeString =  exchange.getValue();
+            Double[] bidAsk = priceMap.get(exchangeString);
+            System.out.println(exchangeString + "-" + "bid: " + bidAsk[0]);
+            System.out.println(exchangeString + "-" + "ask: " + bidAsk[1]);
+        }
     }
 }
