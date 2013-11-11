@@ -23,23 +23,13 @@ public class Comparison {
                 if (exchangeString != exchangeStringInner) {
                     double difference = bidAsk[1] - bidAskInner[0];
                     if (difference > 0) {
-                       System.out.println(exchangeString + " to " + exchangeStringInner + ": " + difference);
+                       System.out.println(exchangeStringInner + " to " + exchangeString + ": " + difference);
                     }
                     else {
-                       System.out.println(exchangeString + " to " + exchangeStringInner + ": no trades");
+                       System.out.println(exchangeStringInner + " to " + exchangeString + ": no trades");
                     }
                 }
             }
         }
-
-
-
-//        for(Map.Entry baseValue : values.entrySet()) {
-//            for(Map.Entry compareValue : values.entrySet()) {
-//                if (baseValue.getKey() != compareValue.getKey()) {
-//                    double[] test = ()baseValue.getValue();
-//                }
-//            }
-//        }
     }
 }

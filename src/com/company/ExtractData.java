@@ -12,41 +12,59 @@ import com.company.Exchange;
  */
 public class ExtractData {
 
+    //Get string representation of Exchange enums
+    private static String bitStamp = Exchange.BITSTAMP.getValue();
+    private static String mtGox = Exchange.MTGOX.getValue();
+    private static String btcE = Exchange.BTCE.getValue();
 
     public static HashMap<String,double[]> extractFloats (HashMap<String, JSONObject> jsonMap) throws JSONException {
         HashMap<String, double[]> priceMap = new HashMap<String, double[]>();
 
-        //Get string representation of Exchange enums
-        String bitStamp = Exchange.BITSTAMP.getValue();
-        String mtGox = Exchange.MTGOX.getValue();
-        String btcE = Exchange.BTCE.getValue();
 
         //Add bid and ask of bitStamp into priceMap
         double[] bitStampPrice = new double[2];
         JSONObject bitStampJson = jsonMap.get(bitStamp);
-        bitStampPrice[0] = Double.parseDouble(bitStampJson.get("bid").toString());
-        bitStampPrice[1] = Double.parseDouble(bitStampJson.get("ask").toString());
+        bitStampPrice[0] = bitStampJson.getDouble("bid");
+        bitStampPrice[1] = bitStampJson.getDouble("ask");
 
         priceMap.put(bitStamp, bitStampPrice);
 
         //Add bid and ask of mtGox into priceMap
         double[] mtGoxPrice = new double[2];
         JSONObject mtGoxJson = jsonMap.get(mtGox);
-        mtGoxPrice[0] = Double.parseDouble(mtGoxJson.getJSONObject("data").getJSONObject("buy").getString("value"));
-        mtGoxPrice[1] = Double.parseDouble(mtGoxJson.getJSONObject("data").getJSONObject("sell").getString("value"));
+        mtGoxPrice[0] = mtGoxJson.getJSONObject("data").getJSONObject("buy").getDouble("value");
+        mtGoxPrice[1] = mtGoxJson.getJSONObject("data").getJSONObject("sell").getDouble("value");
 
         priceMap.put(mtGox, mtGoxPrice);
 
         //Add bid and ask of btc-E into priceMap
         double[] btcEPrice = new double[2];
-        JSONObject btcEStampJson = jsonMap.get(btcE);
-        btcEPrice[0] = Double.parseDouble(btcEStampJson.getJSONObject("ticker").get("buy").toString());
-        btcEPrice[1] = Double.parseDouble(btcEStampJson.getJSONObject("ticker").get("sell").toString());
+        JSONObject btcEJson = jsonMap.get(btcE);
+        btcEPrice[0] = btcEJson.getJSONObject("ticker").getDouble("buy");
+        btcEPrice[1] = btcEJson.getJSONObject("ticker").getDouble("sell");
 
         priceMap.put(btcE,btcEPrice);
 
+
+
         return priceMap;
 
+    }
+
+    public static double getAverageMarketPrice (HashMap<String, JSONObject> jsonMap) throws JSONException {
+
+        JSONObject btcEJson = jsonMap.get(btcE);
+        double btcELast = btcEJson.getJSONObject("ticker").getDouble("last");
+
+        JSONObject bitStampJson = jsonMap.get(bitStamp);
+        double bitStampLast = bitStampJson.getDouble("last");
+
+        JSONObject mtGoxJson = jsonMap.get(mtGox);
+        double mtGoxLast = mtGoxJson.getJSONObject("data").getJSONObject("last").getDouble("value");
+
+
+        double averageMarketPrice = (mtGoxLast + bitStampLast + btcELast)/3;
+        return averageMarketPrice;
     }
 
 }

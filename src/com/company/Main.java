@@ -9,14 +9,20 @@ import java.util.*;
 
 public class Main {
 
-    public static void main(String[] args) throws JSONException, IOException {
+    public static void main(String[] args) throws JSONException, IOException, InterruptedException {
         HashMap<String,double[]> priceMap = ExtractData.extractFloats(GetData.getData());
-        for(Exchange exchange : Exchange.values()){
-            String exchangeString =  exchange.getValue();
-            double[] bidAsk = priceMap.get(exchangeString);
-            System.out.println(exchangeString + "-" + "bid: " + bidAsk[0]);
-            System.out.println(exchangeString + "-" + "ask: " + bidAsk[1]);
+//        for(Exchange exchange : Exchange.values()){
+//            String exchangeString =  exchange.getValue();
+//            double[] bidAsk = priceMap.get(exchangeString);
+//            System.out.println(exchangeString + "-" + "bid: " + bidAsk[0]);
+//            System.out.println(exchangeString + "-" + "ask: " + bidAsk[1]);
+//        }
+//        Comparison.makeComparison(priceMap);
+        if (MarketMovement.isRising(GetData.getData())){
+            System.out.println("Market is Rising, dive on in bro");
         }
-        Comparison.makeComparison(priceMap);
+        else {
+            System.out.println("Don't even think about it, buddy");
+        }
     }
 }
